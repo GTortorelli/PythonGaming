@@ -2,8 +2,8 @@ import pygame, random
 from pygame.locals import *
 # --- DEFs --- #
 def on_grid_random():
-    x = random.randint(0, 590)
-    y = random.randint(0, 590)
+    x = random.randint(20, 560)
+    y = random.randint(20, 560)
     return(x//10 * 10, y//10 * 10)
 
 def collision(c1, c2):
@@ -11,6 +11,7 @@ def collision(c1, c2):
 
 # --- CONFIGS --- #
 FPS = 20
+
 # --- Colors --- # 
 white = (255, 255, 255)
 red = (255, 0, 0)
@@ -21,10 +22,11 @@ UP = 0
 RIGHT = 1
 DOWN = 2
 LEFT = 3
-
 pygame.init()
 screen = pygame.display.set_mode(( 700, 700 ))
 pygame.display.set_caption('SnakeGame')
+clock = pygame.time.Clock()
+cont = 0
 
 # --- Snake atrbutes --- #
 snake = [(200, 200), (210, 200), (220, 200)]
@@ -37,13 +39,38 @@ apple = pygame.Surface((10, 10))
 apple.fill(red)
 apple_pos = on_grid_random()
 
-clock = pygame.time.Clock()
 
 # --- Wall Atributes --- #
+wall = pygame.Surface((2, 700))
+wall.fill(white)
+wall_place = wall.get_rect()
+wall_place.center = (0, 700//2)
+wall_pos = (0, 700//2)
+
+wall2 = pygame.Surface((700, 2))
+wall2.fill(white)
+wall_place2 = wall2.get_rect()
+wall_place2.center = (700//2, 0)
+
+wall3 = pygame.Surface((2, 700))
+wall3.fill(white)
+wall_place3 = wall3.get_rect()
+wall_place.center = (700, 700//2)
+
+wall4 = pygame.Surface((700, 2))
+wall4.fill(white)
+wall_place4 = wall4.get_rect()
+wall_place4.center = (700//2, 700)
+
+# --- SOUUND --- #
+sound = pygame.mixer.Sound('som.ogg')
+sound2 = pygame.mixer.Sound('son2.ogg')
+sound2.play()
 
 # --- MAIN LOOP --- #
 while True:
     clock.tick(FPS)
+    
 
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -59,10 +86,7 @@ while True:
             if event.key == K_RIGHT:
                 my_direction = RIGHT
 
-    if collision(snake[0], apple_pos):
-        apple_pos = on_grid_random()
-        snake.append((0, 0))
-        
+
     for i in range(len(snake) - 1, 0, -1):
         snake[i] = (snake[i-1][0], snake[i-1][1])
 
@@ -78,11 +102,48 @@ while True:
     if my_direction == LEFT:
         snake[0] = (snake[0][0] - 10, snake[0][1])
 
-    if collision( snake )
+    if collision(snake[0], apple_pos):
+        sound.play()
+        cont += 1
+        apple_pos = on_grid_random()
+        snake.append((0, 0))
+
+    for i in range(1, len(snake)):
+        if collision(snake[0], snake[i]):
+            pygame.quit()
+
+    for i in range(0, 700):
+        if collision(snake[0], (0, i)):
+            pygame.quit()
+
+    for i in range(0, 700):
+        if collision(snake[0], (i, 0)):
+            pygame.quit()
+
+    for i in range(0, 700):
+        if collision(snake[0], (700, i)):
+            pygame.quit()
+
+    for i in range(0, 700):
+        if collision(snake[0], (i, 700)):
+            pygame.quit()
+
+    
 
     screen.fill(black)
     screen.blit(apple, apple_pos)
+    screen.blit(wall, wall_place)
+    screen.blit(wall2, wall_place2)
+    screen.blit(wall3, wall_place3)
+    screen.blit(wall4, wall_place4)
+
     for pos in snake: 
         screen.blit(snake_skin, pos)
+
+    font = pygame.font.Font(None, 40)
+    text = font.render(f'Score: {cont}', True, white, None)
+    textBack = text.get_rect()
+    textBack.center = (500, 50)
+    screen.blit(text, textBack)
 
     pygame.display.update()
