@@ -76,6 +76,7 @@ quit_ = True
 while quit_:
     clock.tick(FPS)
 
+    # snake control
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
@@ -106,12 +107,14 @@ while quit_:
     if my_direction == LEFT:
         snake[0] = (snake[0][0] - 10, snake[0][1])
 
+    # Collision betweens snake and the apple
     if collision(snake[0], apple_pos):
         sound.play()
         cont += 1
         apple_pos = on_grid_random()
         snake.append((0, 0))
 
+    # Control the collisin between the snake and the walls
     for i in range(1, len(snake)):
         if collision(snake[0], snake[i]):
             quit_ = False
@@ -132,6 +135,7 @@ while quit_:
         if collision(snake[0], (i, 700)):
             quit_ = False
 
+    # Filling the screen background and the objects in screen
     screen.fill(weird_gray)
     screen.blit(apple, apple_pos)
     screen.blit(wall, wall_place)
@@ -142,6 +146,7 @@ while quit_:
     for pos in snake: 
         screen.blit(snake_skin, pos)
 
+    # Score blitting
     font = pygame.font.Font(None, 40)
     text = font.render(f'Score: {cont}', True, white, None)
     textBack = text.get_rect()
