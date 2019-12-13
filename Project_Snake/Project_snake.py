@@ -16,6 +16,7 @@ FPS = 20
 white = (255, 255, 255)
 red = (255, 0, 0)
 black = (0, 0, 0)
+weird_gray = (54, 54, 54)
 
 # --- MACROS --- #
 UP = 0
@@ -62,15 +63,18 @@ wall4.fill(white)
 wall_place4 = wall4.get_rect()
 wall_place4.center = (700//2, 700)
 
-# --- SOUUND --- #
-sound = pygame.mixer.Sound('som.ogg')
-sound2 = pygame.mixer.Sound('son2.ogg')
+# --- SOUND --- #
+sound = pygame.mixer.Sound('sound.ogg')
+sound2 = pygame.mixer.Sound('sound2.ogg')
+sound3 = pygame.mixer.Sound('sound3.ogg')
 sound2.play()
 
+# --- IMAGES --- #
+image = pygame.image.load('hqdefault.jpg')
 # --- MAIN LOOP --- #
-while True:
+quit_ = True
+while quit_:
     clock.tick(FPS)
-    
 
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -110,27 +114,25 @@ while True:
 
     for i in range(1, len(snake)):
         if collision(snake[0], snake[i]):
-            pygame.quit()
+            quit_ = False
 
     for i in range(0, 700):
         if collision(snake[0], (0, i)):
-            pygame.quit()
+            quit_ = False
 
     for i in range(0, 700):
         if collision(snake[0], (i, 0)):
-            pygame.quit()
+            quit_ = False
 
     for i in range(0, 700):
         if collision(snake[0], (700, i)):
-            pygame.quit()
+            quit_ = False
 
     for i in range(0, 700):
         if collision(snake[0], (i, 700)):
-            pygame.quit()
+            quit_ = False
 
-    
-
-    screen.fill(black)
+    screen.fill(weird_gray)
     screen.blit(apple, apple_pos)
     screen.blit(wall, wall_place)
     screen.blit(wall2, wall_place2)
@@ -147,3 +149,15 @@ while True:
     screen.blit(text, textBack)
 
     pygame.display.update()
+    
+
+sound2.stop()
+sound3.play()
+
+while True:
+    screen.blit(image, (150, 150))
+    pygame.display.update()
+
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
