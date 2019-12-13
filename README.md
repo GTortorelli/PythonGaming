@@ -1,2 +1,2 @@
 # PythonGaming
-This repository is destinated to Python deev in gaming area
+This repository is destinated to Python dev in gaming area
