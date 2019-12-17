@@ -20,12 +20,13 @@ clock = pygame.time.Clock()
 
 # --- Player --- #
 p1_move = 0
-player = [(10, 10)]
-player_skin = pygame.image.load('player.png')
-player_skin2 = pygame.Surface((20, 20))
-player_skin2.fill(white)
 p1_x = 200
 p1_y = 200
+player = [(p1_x, p1_y)]
+
+player_skin = pygame.image.load('player.png')
+player_skin2 = pygame.Surface((20, 20))
+player_skin2.image.load('player.png')
 p1_pos = (p1_x, p1_y) 
 
 # --- classes --- #
@@ -49,14 +50,19 @@ while quit_:
         if event.type == KEYUP:
             if event.key == K_UP:
                 p1_move = UP
-
+    
             if event.key == K_LEFT:
                 p1_move = LEFT
 
             if event.key == K_RIGHT:
                 p1_move = RIGHT
 
-    screen.blit(player_skin, p1_pos)
-    screen.blit(player_skin2, (300, 300))
+
+    if p1_move == UP:
+        p1_y += 0.01
+        print('teste')
+
+    screen.blit(player_skin2, p1_pos)
+    # screen.blit(player_skin2, (300, 300))
 
     pygame.display.update()
